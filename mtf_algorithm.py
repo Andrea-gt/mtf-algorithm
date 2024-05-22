@@ -121,3 +121,44 @@ class mtf_algorithm:
             total_cost += req_cost
         
         print(f"\nTotal Cost: {total_cost}")
+
+    def IMTF(self):
+        """
+        Processes each request in the self.requests list by moving the corresponding node to the front
+        of the linked list using the Improved Move-To-Front (IMTF) algorithm if the accessed element
+        is found by looking ahead the next i-1 elements in the request sequence. If the accessed element
+        is not present within the next i-1 elements in the request sequence, the list remains the same.
+        Prints the list after each request.
+        """
+        print(f"Initial Configuration List:\n{self}")
+        total_cost = 0
+
+        for i, et in enumerate(self.requests):
+            req_cost = 0
+            current_node = self.head  # Start with the head node as the current node for each request.
+            prev = None  # Previous node is initially set to None.
+            found_in_next = False
+
+            while current_node:
+                req_cost += 1
+                next_elements = self.requests[i + 1: i + req_cost]
+                if current_node.data == et:
+                    if et in next_elements:  # IMTF logic: check if accessed element is in next i-1 elements
+                        found_in_next = True
+
+                    if prev is not None:  # If the node to move is not already the head
+                        if found_in_next:
+                            prev.next = current_node.next  # Remove the node from its current position.
+                            current_node.next = self.head  # Set the node's next to the current head.
+                            self.head = current_node  # Update the head to be the current node.
+                    break
+                
+                prev = current_node  # Move prev to the current node.
+                current_node = current_node.next  # Move to the next node in the list.
+
+            # Print the request, its cost and the current configuration of the list
+            print(f"\nRequest: {et}, Cost: {req_cost}")
+            print(f"List: {self}")
+            total_cost += req_cost
+
+        print(f"\nTotal Cost: {total_cost}")
