@@ -88,7 +88,7 @@ class mtf_algorithm:
         while current_node:
             nodes.append(str(current_node))  # Add the string representation of the current node to the list.
             current_node = current_node.next  # Move to the next node.
-        return " -> ".join(nodes)  # Join the node representations with ' -> ' and return the result.
+        return " → ".join(nodes)  # Join the node representations with ' -> ' and return the result.
 
     def moveToFront(self):
         """
@@ -97,12 +97,15 @@ class mtf_algorithm:
         """
 
         print(f"Initial Configuration List:\n{self}")
+        total_cost = 0
 
         for et in self.requests:
+            req_cost = 0
             current_node = self.head  # Start with the head node as the current node for each request.
             prev = None  # Previous node is initially set to None.
 
             while current_node:
+                req_cost += 1
                 if current_node.data == et:
                     if prev is not None:  # If the node to move is not already the head
                         prev.next = current_node.next  # Remove the node from its current position.
@@ -112,12 +115,9 @@ class mtf_algorithm:
                 prev = current_node  # Move prev to the current node.
                 current_node = current_node.next  # Move to the next node in the list.
 
-            # Print the request and the current configuration of the list
-            print(f"\nRequest: {et}")
+            # Print the request, its cost and the current configuration of the list
+            print(f"\nRequest: {et}, Cost: {req_cost}")
             print(f"List: {self}")
-
-# Example usage
-values = [1,2,3,4,5]
-requests = [4,2]
-mtf = mtf_algorithm(values, requests)
-mtf.moveToFront()
+            total_cost += req_cost
+        
+        print(f"\nTotal Cost: {total_cost}")
